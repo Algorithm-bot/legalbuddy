@@ -29,9 +29,13 @@ import GavelIcon from '@mui/icons-material/Gavel';
 import DescriptionIcon from '@mui/icons-material/Description';
 import SchoolIcon from '@mui/icons-material/School';
 import BoltIcon from '@mui/icons-material/Bolt';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { useAuth } from '../AuthContext';
 import '../styles/Home.css';
 
 const Home = () => {
+  const { user, initializing, signInWithGoogle, signOutUser } = useAuth();
+
   return (
     <Box className="home-container">
       {/* VIEW: Top navigation bar */}
@@ -50,6 +54,35 @@ const Home = () => {
           <Button color="inherit" component={RouterLink} to="/guides">
             Legal Guides
           </Button>
+
+          {/* VIEW: Auth actions (Google sign-in / profile) */}
+          <Box sx={{ ml: 2 }}>
+            {initializing ? null : user ? (
+              <Stack direction="row" spacing={1} alignItems="center">
+                <AccountCircleIcon fontSize="small" />
+                <Typography variant="body2" sx={{ maxWidth: 160 }} noWrap>
+                  {user.displayName || user.email}
+                </Typography>
+                <Button
+                  color="inherit"
+                  size="small"
+                  onClick={signOutUser}
+                  sx={{ textTransform: 'none' }}
+                >
+                  Sign out
+                </Button>
+              </Stack>
+            ) : (
+              <Button
+                color="inherit"
+                size="small"
+                onClick={signInWithGoogle}
+                sx={{ textTransform: 'none' }}
+              >
+                Sign in with Google
+              </Button>
+            )}
+          </Box>
         </Toolbar>
       </AppBar>
 
