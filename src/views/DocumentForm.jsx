@@ -70,8 +70,15 @@ const DocumentForm = () => {
     
     if (result.success) {
       // Navigate to display generated document
+      // Pass both document and formData so it can be saved to backend
       navigate(`/documents/${documentType}/generated`, {
-        state: { document: result.document }
+        state: { 
+          document: {
+            ...result.document,
+            type: documentType // Add document type for saving
+          },
+          formData: formData // Pass original form data for saving
+        }
       });
     } else {
       // Display errors from Controller
@@ -87,6 +94,19 @@ const DocumentForm = () => {
       .trim();
   };
 
+  // Helper function to get icon for field type
+  const getFieldIcon = (fieldName) => {
+    const lowerField = fieldName.toLowerCase();
+    if (lowerField.includes('name')) return 'fa-user';
+    if (lowerField.includes('email')) return 'fa-envelope';
+    if (lowerField.includes('address')) return 'fa-map-marker-alt';
+    if (lowerField.includes('phone')) return 'fa-phone';
+    if (lowerField.includes('date')) return 'fa-calendar';
+    if (lowerField.includes('amount') || lowerField.includes('price') || lowerField.includes('rent')) return 'fa-dollar-sign';
+    if (lowerField.includes('description') || lowerField.includes('details')) return 'fa-align-left';
+    return 'fa-edit';
+  };
+
   if (loading || !formFields) {
     return <div className="loading">Loading form...</div>;
   }
@@ -100,10 +120,11 @@ const DocumentForm = () => {
 
       <form onSubmit={handleSubmit} className="document-form">
         {formFields.fields.map((field) => (
-          <div key={field} className="form-group">
+          <div key={field} className={`form-group ${formData[field] && !errors[field] ? 'success' : ''}`}>
             <label htmlFor={field}>
               {formatFieldLabel(field)} <span className="required">*</span>
             </label>
+            <i className={`fas ${getFieldIcon(field)}`}></i>
             <input
               type="text"
               id={field}

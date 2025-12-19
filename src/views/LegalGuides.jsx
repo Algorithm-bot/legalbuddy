@@ -99,7 +99,7 @@ Remember: NDAs should be fair and reasonable to be legally enforceable.`
 
       <div className="navigation-links">
         <button onClick={() => navigate('/')} className="back-button">
-          ← Back to Home
+          Back to Home
         </button>
         <button onClick={() => navigate('/documents')} className="action-button">
           Generate Document

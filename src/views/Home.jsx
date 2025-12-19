@@ -54,6 +54,11 @@ const Home = () => {
           <Button color="inherit" component={RouterLink} to="/guides">
             Legal Guides
           </Button>
+          {user && (
+            <Button color="inherit" component={RouterLink} to="/my-documents">
+              My Documents
+            </Button>
+          )}
 
           {/* VIEW: Auth actions (Google sign-in / profile) */}
           <Box sx={{ ml: 2 }}>

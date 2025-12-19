@@ -27,6 +27,7 @@ import DocumentSelection from './views/DocumentSelection';
 import DocumentForm from './views/DocumentForm';
 import GeneratedDocument from './views/GeneratedDocument';
 import LegalGuides from './views/LegalGuides';
+import MyDocuments from './views/MyDocuments';
 
 // Global styles
 import './styles/App.css';
@@ -81,6 +82,9 @@ function App() {
 
             {/* Route to Legal Guides View */}
             <Route path="/guides" element={<LegalGuides />} />
+
+            {/* Route to My Documents View - Shows user's saved documents */}
+            <Route path="/my-documents" element={<MyDocuments />} />
           </Routes>
         </div>
       </Router>

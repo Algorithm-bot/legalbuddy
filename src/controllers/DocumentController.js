@@ -12,6 +12,7 @@
 
 import { generateDocument, validateFormData } from '../models/DocumentModel.js';
 import { getAllDocumentMetadata, getTemplate } from '../models/TemplateModel.js';
+import { saveDocument } from '../services/documentService.js';
 
 /**
  * Controller method to handle document generation request
@@ -111,4 +112,45 @@ export const validateField = (fieldName, value) => {
     isValid: true,
     message: ''
   };
+};
+
+/**
+ * Controller method to save a generated document to backend MongoDB
+ * 
+ * Flow: View → Controller → Service → Backend API → MongoDB
+ * 
+ * This method:
+ * 1. Receives document data from View
+ * 2. Calls service layer to save to backend
+ * 3. Returns success/error status to View
+ * 
+ * Architecture:
+ * - Controller coordinates the save operation
+ * - Service layer handles API communication
+ * - Backend validates and stores in MongoDB
+ * 
+ * @param {string} documentType - Type of document
+ * @param {string} content - Generated document content
+ * @param {object} formData - Original user input form data
+ * @returns {Promise<object>} Result object with success status
+ */
+export const saveDocumentToBackend = async (documentType, content, formData) => {
+  try {
+    // CONTROLLER: Call service layer to save document
+    const result = await saveDocument(documentType, content, formData);
+    
+    // CONTROLLER: Return success to View
+    return {
+      success: true,
+      message: result.message || 'Document saved successfully',
+      document: result.document
+    };
+  } catch (error) {
+    // CONTROLLER: Handle errors and return to View
+    console.error('Error saving document:', error);
+    return {
+      success: false,
+      error: error.message || 'Failed to save document'
+    };
+  }
 };
